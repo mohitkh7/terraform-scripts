@@ -1,9 +1,9 @@
 locals {
-  iam_role_name = "ecsTaskExecutionRole"
-  subnet_id = "subnet-e8720cc9"
-  security_group_id = "sg-6830966a"
+  iam_role_name      = "ecsTaskExecutionRole"
+  subnet_id          = "subnet-e8720cc9"
+  security_group_id  = "sg-6830966a"
   desired_task_count = 0
-  docker_image = "docker.io/mohitkh7/dev-challenges:latest"
+  docker_image       = "docker.io/mohitkh7/dev-challenges:latest"
 }
 
 data "aws_iam_role" "ecs_exec" {
@@ -28,13 +28,13 @@ resource "aws_ecs_cluster_capacity_providers" "container" {
 }
 
 resource "aws_ecs_service" "container" {
-  name            = "${var.PROJECT}-service"
-  cluster         = aws_ecs_cluster.container.id
-  task_definition = aws_ecs_task_definition.container.id
-  launch_type     = "FARGATE"
-  desired_count   = local.desired_task_count
+  name                    = "${var.PROJECT}-service"
+  cluster                 = aws_ecs_cluster.container.id
+  task_definition         = aws_ecs_task_definition.container.id
+  launch_type             = "FARGATE"
+  desired_count           = local.desired_task_count
   enable_ecs_managed_tags = true
-  wait_for_steady_state = true
+  wait_for_steady_state   = true
   network_configuration {
     subnets          = [data.aws_subnet.az_1a.id]
     security_groups  = [data.aws_security_group.default.id]
